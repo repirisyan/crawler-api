@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { connectDB } from "./db/connection"; // Import the connectDB function
 import { getAllProduct } from "./controller/ProductController/getAllProduct";
+import { getAllTrendingProduct } from "./controller/ProductController/getAllTrendingProduct";
 
 const app: Express = express();
 const port = 3030;
@@ -21,6 +22,8 @@ connectDB().catch((error: any) => {
 });
 
 app.get("/product", getAllProduct);
+app.get("/trending-product", getAllTrendingProduct);
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
