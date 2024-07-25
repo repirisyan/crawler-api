@@ -5,7 +5,7 @@ import { getAllProduct } from "./controller/ProductController/getAllProduct";
 import { getAllTrendingProduct } from "./controller/ProductController/getAllTrendingProduct";
 
 const app: Express = express();
-const port = 3030;
+const port = 8090;
 
 app.use(cors());
 
