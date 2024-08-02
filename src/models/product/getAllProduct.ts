@@ -3,6 +3,9 @@ import mongoosePaginate from "mongoose-paginate-v2";
 
 interface ProductTable extends Document {
   comodity: string;
+  sub_comodity?: string;
+  second_level_sub_comodity?: string;
+  third_level_sub_comodity?: string;
   created_at: string;
   image: string;
   location: string;
@@ -19,6 +22,9 @@ const productSchema = new Schema({
   // Define your schema fields here
   // For example:
   comodity: { type: String, required: true },
+  sub_comodity: { type: String, required: false },
+  second_level_sub_comodity: { type: String, required: false },
+  third_level_sub_comodity: { type: String, required: false },
   created_at: { type: String, required: true },
   image: { type: String, required: true },
   location: { type: String, required: true },
