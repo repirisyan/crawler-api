@@ -25,7 +25,5 @@ app.get("/product", getAllProduct);
 app.get("/trending-product", getAllTrendingProduct);
 
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen(port);
 
