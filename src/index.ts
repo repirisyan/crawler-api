@@ -3,9 +3,10 @@ import { cors } from '@elysiajs/cors'
 import { connectDB } from "./db/connection"; // Import the connectDB function
 import { getAllProduct } from "./controller/ProductController/getAllProduct";
 import { getAllTrendingProduct } from "./controller/ProductController/getAllTrendingProduct";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = new Elysia();
-const port = 8090;
 
 app.use(cors());
 
@@ -19,5 +20,5 @@ app.get("/product", getAllProduct);
 app.get("/trending-product", getAllTrendingProduct);
 
 
-app.listen(port);
+app.listen(process.env.API_PORT || 8090);
 
