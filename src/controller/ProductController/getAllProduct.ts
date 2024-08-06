@@ -1,12 +1,24 @@
-import { Request, Response } from "express";
 import product from "../../models/product/getAllProduct"; // Import the model
 
-export const getAllProduct = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string, 10) || 1; // Default page to 1 if not specified
-  const limit = parseInt(req.query.limit as string, 10) || 10; // Default limit to 10 if not specified
-  const search = (req.query.search as string) || null;
-  const marketplace = req.query.marketplace as string || null
-  const comodity = req.query.comodity as string || null
+interface QueryParams {
+  page?: string;
+  limit?: string;
+  search?: string;
+  marketplace?: string;
+  comodity?: string;
+}
+
+interface RequestContext {
+  query: QueryParams;
+  set: { status: number };
+}
+
+export const getAllProduct = async ({ query, set }: RequestContext) => {
+  const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
+  const limit = parseInt(query.limit as string, 10) || 10; // Default limit to 10 if not specified
+  const search = (query.search as string) || null;
+  const marketplace = query.marketplace as string || null;
+  const comodity = query.comodity as string || null;
   try {
     const options = {
       page,
@@ -33,8 +45,9 @@ export const getAllProduct = async (req: Request, res: Response) => {
 
     const result = await product.paginate(searchQuery, options);
 
-    res.json(result);
+    return result;
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while fetching data" });
+    set.status = 500;
+    return { error: 'An error occurred while fetching data' };
   }
 };
