@@ -1,5 +1,5 @@
-import { Elysia } from 'elysia'
-import { cors } from '@elysiajs/cors'
+import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 import { connectDB } from "./db/connection"; // Import the connectDB function
 import { getAllProduct } from "./controller/ProductController/getAllProduct";
 import { getAllTrendingProduct } from "./controller/ProductController/getAllTrendingProduct";
@@ -19,6 +19,4 @@ connectDB().catch((error: any) => {
 app.get("/product", getAllProduct);
 app.get("/trending-product", getAllTrendingProduct);
 
-
 app.listen(process.env.API_PORT || 8090);
-

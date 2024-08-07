@@ -1,4 +1,4 @@
-import product from "../../models/product/getAllProduct"; // Import the model
+import { paginateProducts } from "../../services/productService"; // Adjust the path as needed
 
 interface QueryParams {
   page?: string;
@@ -14,16 +14,13 @@ interface RequestContext {
 }
 
 export const getAllProduct = async ({ query, set }: RequestContext) => {
-  const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
-  const limit = parseInt(query.limit as string, 10) || 10; // Default limit to 10 if not specified
-  const search = (query.search as string) || null;
-  const marketplace = query.marketplace as string || null;
-  const comodity = query.comodity as string || null;
+  const page = parseInt(query?.page as string, 10) || 1;
+  const limit = parseInt(query?.limit as string, 10) || 15;
+  const search = query?.search || null;
+  const marketplace = query?.marketplace || null;
+  const comodity = query?.comodity || null;
+
   try {
-    const options = {
-      page,
-      limit,
-    };
     let searchQuery: any = {};
     if (search != null) {
       searchQuery.$or = [
@@ -43,11 +40,11 @@ export const getAllProduct = async ({ query, set }: RequestContext) => {
       searchQuery.comodity = comodity;
     }
 
-    const result = await product.paginate(searchQuery, options);
+    const result = await paginateProducts(page, limit, searchQuery);
 
     return result;
   } catch (error) {
     set.status = 500;
-    return { error: 'An error occurred while fetching data' };
+    return { error: "An error occurred while fetching data" };
   }
 };

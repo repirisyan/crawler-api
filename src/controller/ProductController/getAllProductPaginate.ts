@@ -1,10 +1,11 @@
-import product from "../../models/product/getAllTrendingProduct"; // Import the model
+import product from "../../models/product/getAllProductPaginate"; // Import the model
 
 interface QueryParams {
   page?: string;
   limit?: string;
   search?: string;
   marketplace?: string;
+  comodity?: string;
 }
 
 interface RequestContext {
@@ -12,11 +13,12 @@ interface RequestContext {
   set: { status: number };
 }
 
-export const getAllTrendingProduct = async ({ query, set }: RequestContext) => {
+export const getAllProductPaginate = async ({ query, set }: RequestContext) => {
   const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
   const limit = parseInt(query.limit as string, 10) || 10; // Default limit to 10 if not specified
   const search = (query.search as string) || null;
   const marketplace = (query.marketplace as string) || null;
+  const comodity = (query.comodity as string) || null;
   try {
     const options = {
       page,
@@ -25,13 +27,20 @@ export const getAllTrendingProduct = async ({ query, set }: RequestContext) => {
     let searchQuery: any = {};
     if (search != null) {
       searchQuery.$or = [
+        { comodity: { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
         { marketplace: { $regex: search, $options: "i" } },
-        { keyword: { $regex: search, $options: "i" } },
+        { seller: { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
       ];
     }
 
     if (marketplace != null) {
       searchQuery.marketplace = marketplace;
+    }
+
+    if (comodity != null) {
+      searchQuery.comodity = comodity;
     }
 
     const result = await product.paginate(searchQuery, options);

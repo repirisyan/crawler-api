@@ -1,4 +1,5 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, PaginateModel } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 interface ProductTable extends Document {
   comodity: string;
@@ -18,6 +19,8 @@ interface ProductTable extends Document {
 
 // Define the schema for your collection
 const productSchema = new Schema({
+  // Define your schema fields here
+  // For example:
   comodity: { type: String, required: true },
   sub_comodity: { type: String, required: false },
   second_level_sub_comodity: { type: String, required: false },
@@ -33,7 +36,11 @@ const productSchema = new Schema({
   title: { type: String, required: true },
 });
 
-// Create and export the model
-const Product = model<ProductTable>("Product", productSchema);
+productSchema.plugin(mongoosePaginate);
 
-export default Product;
+// Create and export the model
+const product: PaginateModel<ProductTable> = model<
+  ProductTable,
+  PaginateModel<ProductTable>
+>("products", productSchema);
+export default product;
