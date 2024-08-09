@@ -1,5 +1,4 @@
-import { Schema, model, Document, PaginateModel } from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
+import { Schema, model, Document } from "mongoose";
 
 // Define the Product interface
 interface Product extends Document {
@@ -39,11 +38,5 @@ const productSchema = new Schema<Product>({
   created_at: { type: String, required: true },
 });
 
-// Apply the pagination plugin
-productSchema.plugin(mongoosePaginate);
-
 // Create and export the paginated model
-export const Product: PaginateModel<Product> = model<
-  Product,
-  PaginateModel<Product>
->("products", productSchema);
+export const Product = model<Product>("Product", productSchema);

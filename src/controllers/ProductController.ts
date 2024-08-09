@@ -48,4 +48,13 @@ export const ProductController = {
       return { error: "An error occurred while fetching data" };
     }
   },
+  getTotalProduct: async () => {
+      try {
+        const totalProducts = await Product.countDocuments();
+        return totalProducts;
+      } catch (error) {
+        console.error('Error fetching total product count:', error);
+        throw new Error('Could not retrieve total product count');
+      }
+  }
 };
