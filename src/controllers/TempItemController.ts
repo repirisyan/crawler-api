@@ -1,5 +1,5 @@
 import { TempItem } from "../models/TempItem";
-import { getFromCache, setInCache } from '../services/RedisCache';
+import { getFromCache, setInCache } from "../services/RedisCache";
 
 interface QueryParams {
   page?: string;
@@ -19,16 +19,16 @@ export const TempItemController = {
     const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
     const limit = parseInt(query.per_page as string, 10) || 10; // Default limit to 10 if not specified
     const search = (query.search as string) || null;
-    const marketplaces = query.marketplaces ? JSON.parse(query.marketplaces) : [];
+    const marketplaces = query.marketplaces
+      ? JSON.parse(query.marketplaces)
+      : [];
     const comodities = query.comodities ? JSON.parse(query.comodities) : [];
     const skip = (page - 1) * limit;
 
     try {
       let searchQuery: any = {};
       if (search) {
-        searchQuery.$or = [
-          { title: { $regex: search, $options: "i" } },
-        ];
+        searchQuery.$or = [{ title: { $regex: search, $options: "i" } }];
       }
 
       // Apply `marketplace_id` filter if `marketplaces` is provided
@@ -50,10 +50,10 @@ export const TempItemController = {
   },
   getTotalProduct: async () => {
     try {
-      let totalProducts = await getFromCache('total_temp_item');
+      let totalProducts = await getFromCache("total_temp_item");
       if (!totalProducts) {
         totalProducts = await TempItem.countDocuments();
-        await setInCache('total_temp_item', totalProducts);
+        await setInCache("total_temp_item", totalProducts);
       }
       return totalProducts;
     } catch (error) {

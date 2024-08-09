@@ -1,5 +1,5 @@
 import { Product } from "../models/Product";
-import { getFromCache, setInCache } from '../services/RedisCache';
+import { getFromCache, setInCache } from "../services/RedisCache";
 
 interface QueryParams {
   page?: string;
@@ -51,12 +51,12 @@ export const ProductController = {
   },
   getTotalProduct: async () => {
     try {
-      let totalProducts = await getFromCache('total_product');
+      let totalProducts = await getFromCache("total_product");
       if (!totalProducts) {
         totalProducts = await Product.countDocuments();
-        await setInCache('total_product', totalProducts);
+        await setInCache("total_product", totalProducts);
       }
-      
+
       return totalProducts;
     } catch (error) {
       console.error("Error fetching total product count:", error);
