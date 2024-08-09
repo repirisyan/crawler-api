@@ -25,8 +25,7 @@ const productSchema = new Schema({
 productSchema.plugin(mongoosePaginate);
 
 // Create and export the model
-const product: PaginateModel<TrendingProductTable> = model<
+export const Product: PaginateModel<TrendingProductTable> = model<
   TrendingProductTable,
   PaginateModel<TrendingProductTable>
 >("trending_products", productSchema);
-export default product;

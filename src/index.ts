@@ -1,12 +1,13 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { connectDB } from "./db/connection"; // Import the connectDB function
-import { getAllProduct } from "./controller/ProductController/getAllProduct";
-import { getAllTrendingProduct } from "./controller/ProductController/getAllTrendingProduct";
 import dotenv from "dotenv";
+import { registerProductRoutes } from "./routes/ProductRoutes";
+import { registerTrendingProductRoutes } from "./routes/TrendingProductRoutes";
+
 dotenv.config();
 
-const app = new Elysia();
+export const app = new Elysia();
 
 app.use(cors());
 
@@ -16,7 +17,7 @@ connectDB().catch((error: any) => {
   process.exit(1);
 });
 
-app.get("/product", getAllProduct);
-app.get("/trending-product", getAllTrendingProduct);
+registerProductRoutes(app);
+registerTrendingProductRoutes(app);
 
-app.listen(process.env.API_PORT || 8090);
+app.listen(process.env.API_PORT || 3030);
