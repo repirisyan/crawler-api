@@ -8,6 +8,7 @@ interface TempItem extends Document {
   price: Object;
   rating: Object;
   sold: number; // Use number for large integers
+  weight: number;
   seller: Object;
   location: Object;
   description?: string;
@@ -27,6 +28,7 @@ const productSchema = new Schema<TempItem>({
   price: { type: Object, required: true },
   rating: { type: Object, required: true },
   sold: { type: Number, required: true }, // Use Number type
+  weight: { type: Number, required: false }, // Use Number type
   seller: { type: Object, required: true },
   location: { type: Object, required: true },
   description: { type: String, required: false },
