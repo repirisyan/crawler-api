@@ -4,6 +4,7 @@ import { connectDB } from "./db/connection"; // Import the connectDB function
 import dotenv from "dotenv";
 import { registerProductRoutes } from "./routes/ProductRoutes";
 import { registerTrendingProductRoutes } from "./routes/TrendingProductRoutes";
+import { registerTempItemRoutes } from "./routes/TempItemRoutes";
 
 dotenv.config();
 
@@ -19,5 +20,6 @@ connectDB().catch((error: any) => {
 
 registerProductRoutes(app);
 registerTrendingProductRoutes(app);
+registerTempItemRoutes(app);
 
 app.listen(process.env.API_PORT || 3030);

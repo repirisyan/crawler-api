@@ -1,7 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 
 // Define the Product interface
-interface TempProduct extends Document {
+interface TempItem extends Document {
   title: string;
   brand?: string;
   image?: string[];
@@ -20,7 +20,7 @@ interface TempProduct extends Document {
 }
 
 // Define the schema for your collection
-const productSchema = new Schema<TempProduct>({
+const productSchema = new Schema<TempItem>({
   title: { type: String, required: true },
   brand: { type: String, required: false },
   image: { type: [String], required: false },
@@ -38,6 +38,5 @@ const productSchema = new Schema<TempProduct>({
   created_at: { type: String, required: true },
 });
 
-
 // Create and export the paginated model
-export const TempProduct = model<TempProduct>("temp_items", productSchema);
+export const TempItem = model<TempItem>("temp_items", productSchema);
