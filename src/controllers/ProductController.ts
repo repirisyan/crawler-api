@@ -3,42 +3,40 @@ import { getFromCache, setInCache } from "../services/RedisCache";
 
 interface QueryParams {
   page?: string;
-  limit?: string;
+  per_page?: string;
   search?: string;
-  marketplace?: string;
-  comodity?: string;
+  marketplaces?: string;
+  comodities?: string;
 }
 
 interface RequestContext {
   query: QueryParams;
   set: { status: number };
 }
+
 export const ProductController = {
   getAll: async ({ query, set }: RequestContext) => {
     const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
-    const limit = parseInt(query.limit as string, 10) || 10; // Default limit to 10 if not specified
+    const limit = parseInt(query.per_page as string, 10) || 10; // Default limit to 10 if not specified
     const search = (query.search as string) || null;
-    const marketplace = (query.marketplace as string) || null;
-    const comodity = (query.comodity as string) || null;
+    const marketplaces = query.marketplaces
+      ? JSON.parse(query.marketplaces)
+      : [];
+    const comodities = query.comodities ? JSON.parse(query.comodities) : [];
     const skip = (page - 1) * limit;
     try {
       let searchQuery: any = {};
-      if (search != null) {
-        searchQuery.$or = [
-          { comodity: { $regex: search, $options: "i" } },
-          { location: { $regex: search, $options: "i" } },
-          { marketplace: { $regex: search, $options: "i" } },
-          { seller: { $regex: search, $options: "i" } },
-          { title: { $regex: search, $options: "i" } },
-        ];
+      if (search) {
+        searchQuery.$or = [{ title: { $regex: search, $options: "i" } }];
       }
 
-      if (marketplace != null) {
-        searchQuery.marketplace = marketplace;
+      // Apply `marketplace_id` filter if `marketplaces` is provided
+      if (marketplaces.length > 0) {
+        searchQuery.marketplace_id = { $in: marketplaces };
       }
 
-      if (comodity != null) {
-        searchQuery.comodity = comodity;
+      if (comodities.length > 0) {
+        searchQuery.comodity_id = { $in: comodities };
       }
 
       const result = await Product.find(searchQuery).skip(skip).limit(limit);

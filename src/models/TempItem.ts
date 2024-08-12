@@ -4,27 +4,28 @@ import { Schema, model, Document } from "mongoose";
 interface TempItem extends Document {
   title: string;
   brand?: string;
-  image?: string[];
-  price: Object;
-  rating: Object;
+  image?: object;
+  price: object;
+  rating: object;
   sold: number; // Use number for large integers
   weight: number;
-  seller: Object;
-  location: Object;
+  seller: object;
+  location: object;
   description?: string;
   link: string;
   category?: string;
   marketplace: string;
-  comodity: Object;
+  comodity: object;
   keyword: string;
   created_at: string;
+  flag?: boolean;
 }
 
 // Define the schema for your collection
 const productSchema = new Schema<TempItem>({
   title: { type: String, required: true },
   brand: { type: String, required: false },
-  image: { type: [String], required: false },
+  image: { type: Object, required: false },
   price: { type: Object, required: true },
   rating: { type: Object, required: true },
   sold: { type: Number, required: true }, // Use Number type
@@ -38,6 +39,7 @@ const productSchema = new Schema<TempItem>({
   comodity: { type: Object, required: true },
   keyword: { type: String, required: true },
   created_at: { type: String, required: true },
+  flag: { type: Boolean, requred: false },
 });
 
 // Create and export the paginated model

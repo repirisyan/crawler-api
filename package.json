@@ -19,6 +19,7 @@
     "@types/dotenv": "^8.2.0",
     "elysia": "^1.1.5",
     "ioredis": "^5.4.1",
+    "moment": "^2.30.1",
     "mongoose": "^8.5.2",
     "mongoose-paginate-v2": "^1.8.3"
   }

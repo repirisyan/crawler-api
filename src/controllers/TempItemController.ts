@@ -17,7 +17,7 @@ interface RequestContext {
 export const TempItemController = {
   getAll: async ({ query, set }: RequestContext) => {
     const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
-    const limit = parseInt(query.per_page as string, 10) || 10; // Default limit to 10 if not specified
+    const limit = parseInt(query.per_page as string, 10) || 15; // Default limit to 10 if not specified
     const search = (query.search as string) || null;
     const marketplaces = query.marketplaces
       ? JSON.parse(query.marketplaces)

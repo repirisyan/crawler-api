@@ -2,9 +2,9 @@ import { Product } from "../models/Trending"; // Import the model
 
 interface QueryParams {
   page?: string;
-  limit?: string;
+  per_page?: string;
   search?: string;
-  marketplace?: string;
+  marketplaces?: string;
 }
 
 interface RequestContext {
@@ -15,24 +15,24 @@ interface RequestContext {
 export const TrendingProductController = {
   getAll: async ({ query, set }: RequestContext) => {
     const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
-    const limit = parseInt(query.limit as string, 10) || 10; // Default limit to 10 if not specified
+    const limit = parseInt(query.per_page as string, 10) || 10; // Default limit to 10 if not specified
     const search = (query.search as string) || null;
-    const marketplace = (query.marketplace as string) || null;
+    const marketplaces = query.marketplaces
+      ? JSON.parse(query.marketplaces)
+      : [];
     try {
       const options = {
         page,
         limit,
       };
       let searchQuery: any = {};
-      if (search != null) {
-        searchQuery.$or = [
-          { marketplace: { $regex: search, $options: "i" } },
-          { keyword: { $regex: search, $options: "i" } },
-        ];
+      if (search) {
+        searchQuery.$or = [{ keyword: { $regex: search, $options: "i" } }];
       }
 
-      if (marketplace != null) {
-        searchQuery.marketplace = marketplace;
+      // Apply `marketplace_id` filter if `marketplaces` is provided
+      if (marketplaces.length > 0) {
+        searchQuery.marketplace_id = { $in: marketplaces };
       }
 
       const result = await Product.paginate(searchQuery, options);

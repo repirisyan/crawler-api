@@ -1,7 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 
 // Define the Product interface
-interface Product extends Document {
+interface Supervision extends Document {
   title: string;
   brand?: string;
   image?: object;
@@ -16,11 +16,13 @@ interface Product extends Document {
   marketplace: string;
   comodity: object;
   keyword: string;
+  status: object;
+  crawler_at: string;
   created_at: string;
 }
 
 // Define the schema for your collection
-const productSchema = new Schema<Product>({
+const productSchema = new Schema<Supervision>({
   title: { type: String, required: true },
   brand: { type: String, required: false },
   image: { type: Object, required: false },
@@ -35,8 +37,10 @@ const productSchema = new Schema<Product>({
   marketplace: { type: String, required: true },
   comodity: { type: Object, required: true },
   keyword: { type: String, required: true },
+  status: { type: Object, required: true },
+  crawler_at: { type: String, requred: true },
   created_at: { type: String, required: true },
 });
 
 // Create and export the paginated model
-export const Product = model<Product>("Product", productSchema);
+export const Supervision = model<Supervision>("supervisions", productSchema);
