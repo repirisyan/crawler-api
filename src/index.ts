@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
+import { swagger } from '@elysiajs/swagger'
 import { connectDB } from "./db/connection"; // Import the connectDB function
 import dotenv from "dotenv";
 import { registerProductRoutes } from "./routes/ProductRoutes";
@@ -12,6 +13,7 @@ dotenv.config();
 export const app = new Elysia();
 
 app.use(cors());
+app.use(swagger())
 
 // Connect to MongoDB
 connectDB().catch((error: any) => {
