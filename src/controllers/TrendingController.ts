@@ -32,7 +32,7 @@ export const TrendingProductController = {
 
       // Apply `marketplace_id` filter if `marketplaces` is provided
       if (marketplaces.length > 0) {
-        searchQuery.marketplace_id = { $in: marketplaces };
+        searchQuery.marketplace = { $in: marketplaces };
       }
 
       const result = await Product.paginate(searchQuery, options);

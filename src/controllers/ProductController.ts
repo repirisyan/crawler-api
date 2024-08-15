@@ -32,11 +32,11 @@ export const ProductController = {
 
       // Apply `marketplace_id` filter if `marketplaces` is provided
       if (marketplaces.length > 0) {
-        searchQuery.marketplace_id = { $in: marketplaces };
+        searchQuery.marketplace = { $in: marketplaces };
       }
 
       if (comodities.length > 0) {
-        searchQuery.comodity_id = { $in: comodities };
+        searchQuery["comodity.comodity"] = { $in: comodities };
       }
 
       const result = await Product.find(searchQuery).skip(skip).limit(limit);
