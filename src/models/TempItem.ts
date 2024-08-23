@@ -17,6 +17,7 @@ interface TempItem extends Document {
   marketplace: string;
   comodity: object;
   keyword: string;
+  certified: object;
   created_at: string;
   flag?: boolean;
 }
@@ -38,6 +39,7 @@ const productSchema = new Schema<TempItem>({
   marketplace: { type: String, required: true },
   comodity: { type: Object, required: true },
   keyword: { type: String, required: true },
+  certified: { type: Object, required: true },
   created_at: { type: String, required: true },
   flag: { type: Boolean, requred: false },
 });

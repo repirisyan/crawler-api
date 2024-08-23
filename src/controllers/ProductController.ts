@@ -7,6 +7,7 @@ interface QueryParams {
   search?: string;
   marketplaces?: string;
   comodities?: string;
+  certificates?: string;
 }
 
 interface RequestContext {
@@ -22,6 +23,9 @@ export const ProductController = {
     const marketplaces = query.marketplaces
       ? JSON.parse(query.marketplaces)
       : [];
+    const certificates = query.certificates
+      ? JSON.parse(query.certificates)
+      : [];
     const comodities = query.comodities ? JSON.parse(query.comodities) : [];
     const skip = (page - 1) * limit;
     try {
@@ -33,6 +37,21 @@ export const ProductController = {
       // Apply `marketplace_id` filter if `marketplaces` is provided
       if (marketplaces.length > 0) {
         searchQuery.marketplace = { $in: marketplaces };
+      }
+
+      // Apply certificates filter if provided
+      if (certificates.length > 0) {
+        const certificateFields = [
+          "certified.bpom",
+          "certified.sni",
+          "certified.distribution_permit",
+          "certified.halal",
+        ];
+        certificates.forEach((cert: any, index: any) => {
+          if (cert) {
+            searchQuery[certificateFields[index]] = cert;
+          }
+        });
       }
 
       if (comodities.length > 0) {

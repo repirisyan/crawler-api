@@ -17,6 +17,7 @@ interface Supervision extends Document {
   comodity: object;
   keyword: string;
   status: object;
+  certified: object;
   crawler_at: string;
   created_at: string;
 }
@@ -38,6 +39,7 @@ const productSchema = new Schema<Supervision>({
   comodity: { type: Object, required: true },
   keyword: { type: String, required: true },
   status: { type: Object, required: true },
+  certified: { type: Object, required: true },
   crawler_at: { type: String, requred: true },
   created_at: { type: String, required: true },
 });

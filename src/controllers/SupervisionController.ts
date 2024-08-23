@@ -11,6 +11,7 @@ interface QueryParams {
   comodities?: string;
   status?: number;
   date?: string;
+  certificates?: string;
 }
 
 interface RequestContext {
@@ -24,9 +25,11 @@ export const SupervisionController = {
     const search = (query.search as string) || null;
     const status = query.status || null;
     const date = query.date;
-
     const marketplaces = query.marketplaces
       ? JSON.parse(query.marketplaces)
+      : [];
+    const certificates = query.certificates
+      ? JSON.parse(query.certificates)
       : [];
     const comodities = query.comodities ? JSON.parse(query.comodities) : [];
     const skip = (page - 1) * limit;
@@ -44,6 +47,21 @@ export const SupervisionController = {
 
       if (comodities.length > 0) {
         searchQuery["comodity.comodity"] = { $in: comodities };
+      }
+
+      // Apply certificates filter if provided
+      if (certificates.length > 0) {
+        const certificateFields = [
+          "certified.bpom",
+          "certified.sni",
+          "certified.distribution_permit",
+          "certified.halal",
+        ];
+        certificates.forEach((cert: any, index: any) => {
+          if (cert) {
+            searchQuery[certificateFields[index]] = cert;
+          }
+        });
       }
 
       if (date != null) {

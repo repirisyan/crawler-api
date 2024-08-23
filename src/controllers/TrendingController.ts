@@ -5,6 +5,8 @@ interface QueryParams {
   per_page?: string;
   search?: string;
   marketplaces?: string;
+  date_from?: string;
+  date_until?: string;
 }
 
 interface RequestContext {
@@ -20,6 +22,8 @@ export const TrendingProductController = {
     const marketplaces = query.marketplaces
       ? JSON.parse(query.marketplaces)
       : [];
+    const date_from = query.date_from || null;
+    const date_until = query.date_until || null;
     try {
       const options = {
         page,
@@ -33,6 +37,34 @@ export const TrendingProductController = {
       // Apply `marketplace_id` filter if `marketplaces` is provided
       if (marketplaces.length > 0) {
         searchQuery.marketplace = { $in: marketplaces };
+      }
+      if (date_from && date_until) {
+        searchQuery.$expr = {
+          $and: [
+            {
+              $gte: [
+                {
+                  $dateFromString: {
+                    dateString: "$created_at",
+                    format: "%Y-%m-%d %H:%M:%S",
+                  },
+                },
+                new Date(date_from + "T00:00:00Z"),
+              ],
+            },
+            {
+              $lte: [
+                {
+                  $dateFromString: {
+                    dateString: "$created_at",
+                    format: "%Y-%m-%d %H:%M:%S",
+                  },
+                },
+                new Date(date_until + "T23:59:59Z"),
+              ],
+            },
+          ],
+        };
       }
 
       const result = await Product.paginate(searchQuery, options);
