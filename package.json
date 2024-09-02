@@ -18,10 +18,10 @@
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/swagger": "^1.1.1",
     "@types/dotenv": "^8.2.0",
-    "elysia": "^1.1.9",
+    "elysia": "^1.1.11",
     "ioredis": "^5.4.1",
     "moment": "^2.30.1",
-    "mongoose": "^8.5.4",
+    "mongoose": "^8.6.0",
     "mongoose-paginate-v2": "^1.8.3"
   }
 }
