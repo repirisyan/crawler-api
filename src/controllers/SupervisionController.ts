@@ -7,70 +7,65 @@ interface QueryParams {
   page?: string;
   per_page?: string;
   search?: string;
-  marketplaces?: string;
-  comodities?: string;
+  marketplaces?: string; // JSON string
+  comodities?: string; // JSON string
   status?: number;
-  date?: string;
-  certificates?: string;
+  date?: string; // YYYY-MM-DD format expected
+  certificates?: string; // JSON string
 }
 
 interface RequestContext {
   query: QueryParams;
   set: { status: number };
 }
+
+const CERTIFICATE_FIELDS = [
+  "certified.bpom",
+  "certified.sni",
+  "certified.distribution_permit",
+  "certified.halal",
+];
+
 export const SupervisionController = {
   getAll: async ({ query, set }: RequestContext) => {
     const page = parseInt(query.page as string, 10) || 1; // Default page to 1 if not specified
     const limit = parseInt(query.per_page as string, 10) || 15; // Default limit to 10 if not specified
+    const skip = (page - 1) * limit;
     const search = (query.search as string) || null;
     const status = query.status || null;
-    const date = query.date;
-    const marketplaces = query.marketplaces
+    const date = query.date ? moment(query.date, "YYYY-MM-DD", true) : null;
+
+    const marketplaces: string[] = query.marketplaces
       ? JSON.parse(query.marketplaces)
       : [];
-    const certificates = query.certificates
+    const certificates: (string | boolean)[] = query.certificates
       ? JSON.parse(query.certificates)
       : [];
-    const comodities = query.comodities ? JSON.parse(query.comodities) : [];
-    const skip = (page - 1) * limit;
+    const comodities: string[] = query.comodities
+      ? JSON.parse(query.comodities)
+      : [];
 
     try {
-      let searchQuery: any = {};
-      if (search) {
-        searchQuery.$or = [{ title: { $regex: search, $options: "i" } }];
+      const searchQuery: any = {
+        ...(search && { $or: [{ title: { $regex: search, $options: "i" } }] }),
+        ...(marketplaces.length > 0 && { marketplace: { $in: marketplaces } }),
+        ...(comodities.length > 0 && {
+          "comodity.comodity": { $in: comodities },
+        }),
+      };
+
+      certificates.forEach((cert, index) => {
+        if (cert) {
+          searchQuery[CERTIFICATE_FIELDS[index]] = cert;
+        }
+      });
+
+      if (date && date.isValid()) {
+        searchQuery.created_at = { $eq: date.format("YYYY-MM-DD") };
       }
 
-      // Apply `marketplace_id` filter if `marketplaces` is provided
-      if (marketplaces.length > 0) {
-        searchQuery.marketplace = { $in: marketplaces };
-      }
-
-      if (comodities.length > 0) {
-        searchQuery["comodity.comodity"] = { $in: comodities };
-      }
-
-      // Apply certificates filter if provided
-      if (certificates.length > 0) {
-        const certificateFields = [
-          "certified.bpom",
-          "certified.sni",
-          "certified.distribution_permit",
-          "certified.halal",
-        ];
-        certificates.forEach((cert: any, index: any) => {
-          if (cert) {
-            searchQuery[certificateFields[index]] = cert;
-          }
-        });
-      }
-
-      if (date != null) {
-        searchQuery.created_at = { $eq: date };
-      }
-
-      if (status != null) {
-        const statusBool = status == 1;
-        searchQuery["status.value"] = { $eq: statusBool };
+      if (status !== null) {
+        searchQuery["status.value"] = status === 1;
       }
 
       const result = await Supervision.find(searchQuery)
@@ -79,6 +74,7 @@ export const SupervisionController = {
 
       return result;
     } catch (error) {
+      console.error("Error fetching supervision data:", error);
       set.status = 500;
       return { error: "An error occurred while fetching data" };
     }
@@ -128,9 +124,9 @@ export const SupervisionController = {
   },
   update: async (body: any) => {
     try {
-      const updates = body.ids.map((element: any) => ({
+      const updates = body.ids.map((id: any) => ({
         updateOne: {
-          filter: { _id: element },
+          filter: { _id: id },
           update: {
             $set: {
               "status.value": true,
@@ -159,7 +155,7 @@ export const SupervisionController = {
       let totalProducts = await getFromCache("total_product_supervision");
       if (!totalProducts) {
         totalProducts = await Supervision.countDocuments();
-        await setInCache("total_product_supervision", totalProducts);
+        await setInCache("total_product_supervision", totalProducts, 86400);
       }
 
       return totalProducts;
