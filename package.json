@@ -15,10 +15,10 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/cors": "^1.1.1",
     "@elysiajs/swagger": "^1.1.1",
     "@types/dotenv": "^8.2.0",
-    "elysia": "^1.1.11",
+    "elysia": "^1.1.12",
     "ioredis": "^5.4.1",
     "moment": "^2.30.1",
     "mongoose": "^8.6.1",
