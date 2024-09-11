@@ -7,13 +7,21 @@ import { registerProductRoutes } from "./routes/ProductRoutes";
 import { registerTrendingProductRoutes } from "./routes/TrendingProductRoutes";
 import { registerTempItemRoutes } from "./routes/TempItemRoutes";
 import { registerSupervisionRoutes } from "./routes/SupervisionRoutes";
-
 dotenv.config();
 
 export const app = new Elysia();
 
 app.use(cors());
-app.use(swagger());
+app.use(
+  swagger({
+    documentation: {
+      info: {
+        title: "Crawler Documentation",
+        version: "1.0.0",
+      },
+    },
+  }),
+);
 
 // Connect to MongoDB
 connectDB().catch((error: any) => {
