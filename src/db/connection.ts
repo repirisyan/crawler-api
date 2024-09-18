@@ -1,12 +1,19 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
+// Load environment variables from .env file
 dotenv.config();
 
-const mongoUri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`; // Replace 'mydatabase' with your actual database name
+// Build the MongoDB URI
+const mongoUri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_SOURCE}`;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(mongoUri);
+    // Connect to MongoDB
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("MongoDB connection error:", error);

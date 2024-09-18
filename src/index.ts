@@ -7,6 +7,7 @@ import { registerProductRoutes } from "./routes/ProductRoutes";
 import { registerTrendingProductRoutes } from "./routes/TrendingProductRoutes";
 import { registerTempItemRoutes } from "./routes/TempItemRoutes";
 import { registerSupervisionRoutes } from "./routes/SupervisionRoutes";
+import { registerBrandRoutes } from "./routes/BrandRoutes";
 dotenv.config();
 
 export const app = new Elysia();
@@ -33,5 +34,6 @@ registerProductRoutes(app);
 registerTrendingProductRoutes(app);
 registerTempItemRoutes(app);
 registerSupervisionRoutes(app);
+registerBrandRoutes(app);
 
 app.listen(process.env.API_PORT || 3030);
