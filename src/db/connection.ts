@@ -10,10 +10,7 @@ const mongoUri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWO
 const connectDB = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(mongoUri);
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("MongoDB connection error:", error);
