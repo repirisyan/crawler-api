@@ -5,7 +5,6 @@ interface QueryParams {
   page?: string;
   per_page?: string;
   search?: string;
-  
 }
 
 interface RequestContext {
@@ -20,7 +19,7 @@ export const BrandController = {
     const search = (query.search as string) || null;
 
     try {
-     const options = {
+      const options = {
         page,
         limit,
         lean: true, // Return plain JS objects, not Mongoose Documents
@@ -41,13 +40,11 @@ export const BrandController = {
   },
   store: async (body: any) => {
     try {
-
       const brand = {
-      	name: body.name
-      }
+        name: body.name,
+      };
 
-      await Brand.create(brand)
-
+      await Brand.create(brand);
     } catch (error) {
       console.error("Error storing brand:", error);
       throw new Error("Could not store brand");
@@ -55,17 +52,16 @@ export const BrandController = {
   },
   update: async (body: any) => {
     try {
-
-    	const brand = {
-    		updateOne: {
-    			filter: {_id: body.id},
-    			update: {
-    				$set: {
-    					"name" : body.name
-    				}
-    			}
-    		}
-    	}
+      const brand = {
+        updateOne: {
+          filter: { _id: body.id },
+          update: {
+            $set: {
+              name: body.name,
+            },
+          },
+        },
+      };
 
       await Brand.updateOne(brand);
     } catch (error) {

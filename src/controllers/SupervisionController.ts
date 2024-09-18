@@ -110,6 +110,7 @@ export const SupervisionController = {
         title: element.title,
         weight: element.weight,
         brand: element.brand,
+        certified: element.certified,
         status: { value: false },
         created_at: moment().format("YYYY-MM-DD"),
       }));

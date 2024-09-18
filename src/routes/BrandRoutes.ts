@@ -22,7 +22,7 @@ export const registerBrandRoutes = (app: Elysia) => {
     {
       body: t.Object({
         id: t.String(),
-        name: t.String()
+        name: t.String(),
       }),
     },
   );

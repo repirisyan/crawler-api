@@ -14,7 +14,7 @@ const productSchema = new Schema<Brand>({
 productSchema.plugin(mongoosePaginate);
 
 // Create and export the model
-export const Brand: PaginateModel<Brand> = model<
-  Brand,
-  PaginateModel<Brand>
->("brands", productSchema);
+export const Brand: PaginateModel<Brand> = model<Brand, PaginateModel<Brand>>(
+  "brands",
+  productSchema,
+);
