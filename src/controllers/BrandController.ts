@@ -26,7 +26,7 @@ export const BrandController = {
       };
 
       const searchQuery: any = {
-        ...(search && { $or: [{ title: { $regex: search, $options: "i" } }] }),
+        ...(search && { $or: [{ name: { $regex: search, $options: "i" } }] }),
       };
 
       const result = await Brand.paginate(searchQuery, options);
@@ -40,30 +40,24 @@ export const BrandController = {
   },
   store: async (body: any) => {
     try {
-      const brand = {
-        name: body.name,
-      };
-
+      const brand = {name: body.name};
       await Brand.create(brand);
     } catch (error) {
       console.error("Error storing brand:", error);
       throw new Error("Could not store brand");
     }
   },
+  edit: async (id:string) => {
+    try{
+      return await Brand.find({_id: id})
+    }catch(error){
+      console.error("Error get brand:", error);
+      throw new Error("Could not get brand");
+    }
+  },
   update: async (body: any) => {
     try {
-      const brand = {
-        updateOne: {
-          filter: { _id: body.id },
-          update: {
-            $set: {
-              name: body.name,
-            },
-          },
-        },
-      };
-
-      await Brand.updateOne(brand);
+      await Brand.findByIdAndUpdate(body.id,{name:body.name});
     } catch (error) {
       console.error("Error updates brand:", error);
       throw new Error("Could not update brand");

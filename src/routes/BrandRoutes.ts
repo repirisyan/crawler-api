@@ -3,6 +3,9 @@ import { BrandController } from "../controllers/BrandController";
 
 export const registerBrandRoutes = (app: Elysia) => {
   app.get("/brand", BrandController.getAll);
+  app.get("/brand/:id", ({params: {id}})=>{
+    return BrandController.edit(id)
+  })
   app.post(
     "/brand",
     ({ body }) => {
