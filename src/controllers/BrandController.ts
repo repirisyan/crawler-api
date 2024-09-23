@@ -40,24 +40,24 @@ export const BrandController = {
   },
   store: async (body: any) => {
     try {
-      const brand = {name: body.name};
+      const brand = { name: body.name };
       await Brand.create(brand);
     } catch (error) {
       console.error("Error storing brand:", error);
       throw new Error("Could not store brand");
     }
   },
-  edit: async (id:string) => {
-    try{
-      return await Brand.find({_id: id})
-    }catch(error){
+  edit: async (id: string) => {
+    try {
+      return await Brand.find({ _id: id });
+    } catch (error) {
       console.error("Error get brand:", error);
       throw new Error("Could not get brand");
     }
   },
   update: async (body: any) => {
     try {
-      await Brand.findByIdAndUpdate(body.id,{name:body.name});
+      await Brand.findByIdAndUpdate(body.id, { name: body.name });
     } catch (error) {
       console.error("Error updates brand:", error);
       throw new Error("Could not update brand");

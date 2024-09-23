@@ -1,25 +1,35 @@
 import { Elysia, t } from "elysia";
 import { BrandController } from "../controllers/BrandController";
-
 export const registerBrandRoutes = (app: Elysia) => {
-  app.get("/brand", BrandController.getAll);
-  app.get("/brand/:id", ({params: {id}})=>{
-    return BrandController.edit(id)
-  })
+  app.get("/brand", BrandController.getAll, { detail: { tags: ["Brand"] } });
+  app.get(
+    "/brand/:id",
+    async ({ params: { id } }) => {
+      return BrandController.edit(id);
+    },
+    {
+      detail: {
+        tags: ["Brand"],
+      },
+    },
+  );
   app.post(
     "/brand",
-    ({ body }) => {
+    async ({ body }) => {
       return BrandController.store(body);
     },
     {
       body: t.Object({
         name: t.String(),
       }),
+      detail: {
+        tags: ["Brand"],
+      },
     },
   );
   app.patch(
     "/brand",
-    ({ body }) => {
+    async ({ body }) => {
       return BrandController.update(body);
     },
     {
@@ -27,17 +37,23 @@ export const registerBrandRoutes = (app: Elysia) => {
         id: t.String(),
         name: t.String(),
       }),
+      detail: {
+        tags: ["Brand"],
+      },
     },
   );
   app.delete(
     "/brand",
-    ({ body }) => {
+    async ({ body }) => {
       return BrandController.destroy(body);
     },
     {
       body: t.Object({
         ids: t.Array(t.String()),
       }),
+      detail: {
+        tags: ["Brand"],
+      },
     },
   );
 };
