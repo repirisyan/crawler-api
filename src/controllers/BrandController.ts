@@ -1,5 +1,4 @@
 import { Brand } from "../models/Brand";
-import { getFromCache, setInCache } from "../services/RedisCache";
 
 interface QueryParams {
   page?: string;

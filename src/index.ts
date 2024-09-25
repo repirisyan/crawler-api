@@ -9,6 +9,7 @@ import { registerTrendingProductRoutes } from "./routes/TrendingProductRoutes";
 import { registerTempItemRoutes } from "./routes/TempItemRoutes";
 import { registerSupervisionRoutes } from "./routes/SupervisionRoutes";
 import { registerBrandRoutes } from "./routes/BrandRoutes";
+import { registerSellerDistributionRoutes } from "./routes/SellerDistribution";
 import { bearer } from "@elysiajs/bearer";
 dotenv.config();
 
@@ -64,5 +65,6 @@ registerTrendingProductRoutes(app);
 registerTempItemRoutes(app);
 registerSupervisionRoutes(app);
 registerBrandRoutes(app);
+registerSellerDistributionRoutes(app);
 
 app.listen(process.env.API_PORT || 3030);

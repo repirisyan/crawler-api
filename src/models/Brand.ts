@@ -1,4 +1,4 @@
-import { Schema, model, Document, PaginateModel } from "mongoose";
+import { Schema, model, Document, type PaginateModel } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 // Define the Brand interface
