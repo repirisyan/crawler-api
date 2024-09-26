@@ -11,7 +11,6 @@ import { registerSupervisionRoutes } from "./routes/SupervisionRoutes";
 import { registerBrandRoutes } from "./routes/BrandRoutes";
 import { registerSellerDistributionRoutes } from "./routes/SellerDistribution";
 import { registerAuthRoutes } from "./routes/AuthRoutes";
-import { bearer } from "@elysiajs/bearer";
 dotenv.config();
 
 export const app = new Elysia();
@@ -27,7 +26,6 @@ app.use(
     },
   }),
 );
-app.use(bearer());
 app.use(
   jwt({
     name: "jwt",
@@ -35,9 +33,10 @@ app.use(
   }),
 );
 
-app.onBeforeHandle(async ({ jwt, bearer, set, request }) => {
-  const verify = await jwt.verify(bearer);
-  console.log(request.url);
+app.onBeforeHandle(async ({ jwt, headers, set, request }) => {
+  const authHeader = headers.authorization;
+  const token = authHeader?.split(" ")[1];
+  const verify = await jwt.verify(token);
   if (!verify && request.url != `${process.env.HOST_URL}/sign`) {
     set.status = 401;
     return "Unauthorized";
