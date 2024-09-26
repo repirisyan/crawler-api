@@ -10,6 +10,7 @@ import { registerTempItemRoutes } from "./routes/TempItemRoutes";
 import { registerSupervisionRoutes } from "./routes/SupervisionRoutes";
 import { registerBrandRoutes } from "./routes/BrandRoutes";
 import { registerSellerDistributionRoutes } from "./routes/SellerDistribution";
+import { registerAuthRoutes } from "./routes/AuthRoutes";
 import { bearer } from "@elysiajs/bearer";
 dotenv.config();
 
@@ -30,28 +31,17 @@ app.use(bearer());
 app.use(
   jwt({
     name: "jwt",
-    secret: "Fischl von Luftschloss Narfidort",
+    secret: ";$l(/LyhNTl/KuN@0!>gM39njTlxYI",
   }),
 );
 
 app.onBeforeHandle(async ({ jwt, bearer, set, request }) => {
   const verify = await jwt.verify(bearer);
-  if (
-    !verify &&
-    request.url != `${process.env.HOST_URL}/sign`
-  ) {
+  console.log(request.url);
+  if (!verify && request.url != `${process.env.HOST_URL}/sign`) {
     set.status = 401;
     return "Unauthorized";
   }
-});
-
-app.get("/sign", async ({ jwt, cookie: { auth } }) => {
-  auth.set({
-    value: await jwt.sign(),
-    maxAge: 1 * 86400,
-  });
-
-  return auth.value;
 });
 
 // Connect to MongoDB
@@ -60,6 +50,7 @@ connectDB().catch((error: any) => {
   process.exit(1);
 });
 
+registerAuthRoutes(app);
 registerProductRoutes(app);
 registerTrendingProductRoutes(app);
 registerTempItemRoutes(app);
