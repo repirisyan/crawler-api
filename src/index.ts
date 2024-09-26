@@ -38,7 +38,7 @@ app.onBeforeHandle(async ({ jwt, bearer, set, request }) => {
   const verify = await jwt.verify(bearer);
   if (
     !verify &&
-    request.url != `${process.env.HOST_URL}:${process.env.API_PORT}/sign`
+    request.url != `${process.env.HOST_URL}/sign`
   ) {
     set.status = 401;
     return "Unauthorized";
