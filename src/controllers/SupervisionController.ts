@@ -65,7 +65,7 @@ export const SupervisionController = {
       }
 
       if (status !== null) {
-        searchQuery["status.value"] = status === 1;
+        searchQuery["status.value"] = (status == 1);
       }
 
       const result = await Supervision.find(searchQuery)
