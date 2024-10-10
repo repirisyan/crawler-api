@@ -1,4 +1,4 @@
-import { SellerDistribution } from "../models/SellerDistribution";
+import { BrandLeaderboard } from "../models/BrandLeaderboard";
 import { getFromCache, setInCache } from "../services/RedisCache";
 import moment from "moment";
 
@@ -13,36 +13,39 @@ interface RequestContext {
   set: { status: number };
 }
 
-export const SellerDistributionController = {
+export const BrandLeaderboardController = {
   getAll: async ({ query, set }: RequestContext) => {
     const year = parseInt(query.year, 10) || moment().year();
     const month = parseInt(query.month, 10) || moment().month() + 1;
     const date = query.date || null;
     try {
-      let result = await getFromCache(`seller_distribution_${year}_${month}`);
+      let result = await getFromCache(`brandLeaderboard_${year}_${month}`);
       if (!result) {
         const searchQuery: any = {
           ...(year && { year: year }),
           ...(month && { month: month }),
         };
 
-        // Aggregation pipeline to group by commodity and count/sum other fields
-        const result = await SellerDistribution.aggregate([
+        // Aggregation pipeline to group by brand and count/sum other fields
+        const result = await BrandLeaderboard.aggregate([
           { $match: searchQuery }, // Step 1: Filter by year, month, date
           {
             $group: {
               _id: {
-                comodity: "$comodity", // Group by commodity
+                brand: "$brand", // Group by brand
                 year: "$year",
                 month: "$month",
               },
-              totalSeller: { $sum: "$seller" }, // Sum the "amount" field (assuming you have such a field)
+              totalProduct: { $sum: "$total" }, // Sum the "amount" field (assuming you have such a field)
             },
           },
+          { $sort: { totalProduct: -1 } }, // Sort by totalProduct in descending order
+          { $limit: 20 }, // Limit to top 20 results
         ]);
-        await setInCache(`seller_distribution_${year}_${month}`, result, 86400);
+        await setInCache(`brandLeaderboard_${year}_${month}`, result, 86400);
         return result;
       }
+
       return result;
     } catch (error) {
       console.error("Error fetching seller distribution data:", error);

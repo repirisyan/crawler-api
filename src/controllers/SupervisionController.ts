@@ -65,7 +65,7 @@ export const SupervisionController = {
       }
 
       if (status !== null) {
-        searchQuery["status.value"] = (status == 1);
+        searchQuery["status.value"] = status == 1;
       }
 
       const result = await Supervision.find(searchQuery)
@@ -157,8 +157,8 @@ export const SupervisionController = {
       if (!totalProducts) {
         totalProducts = await Supervision.countDocuments();
         await setInCache("total_product_supervision", totalProducts, 86400);
+        return totalProducts;
       }
-
       return totalProducts;
     } catch (error) {
       console.error("Error fetching total product count:", error);

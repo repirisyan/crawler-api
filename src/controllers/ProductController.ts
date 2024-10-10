@@ -71,6 +71,7 @@ export const ProductController = {
       if (!totalProducts) {
         totalProducts = await Product.countDocuments();
         await setInCache("total_product", totalProducts, 86400);
+        return totalProducts;
       }
       return totalProducts;
     } catch (error) {

@@ -71,6 +71,7 @@ export const TempItemController = {
       if (!totalProducts) {
         totalProducts = await TempItem.countDocuments();
         await setInCache("total_temp_item", totalProducts);
+        return totalProducts;
       }
       return totalProducts;
     } catch (error) {
