@@ -30,7 +30,9 @@ app.use(
 app.use(
   jwt({
     name: "jwt",
-    secret: ";$l(/LyhNTl/KuN@0!>gM39njTlxYI",
+    secret: process.env.JWT_SECRET
+      ? process.env.JWT_SECRET
+      : ";$l(/LyhNTl/KuN@0!>gM39njTlxYI",
   }),
 );
 
