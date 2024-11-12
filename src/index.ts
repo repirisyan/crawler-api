@@ -16,7 +16,7 @@ dotenv.config();
 
 export const app = new Elysia();
 
-app.use(cors());
+app.use(cors({origin: '*'}));
 app.use(
   swagger({
     documentation: {
