@@ -20,10 +20,10 @@
     "@elysiajs/swagger": "^1.1.6",
     "@types/dotenv": "^8.2.3",
     "bcrypt": "^5.1.1",
-    "elysia": "^1.1.25",
+    "elysia": "^1.1.26",
     "ioredis": "^5.4.1",
     "moment": "^2.30.1",
-    "mongoose": "^8.8.3",
+    "mongoose": "^8.8.4",
     "mongoose-paginate-v2": "^1.8.5",
     "mysql2": "^3.11.5"
   }
